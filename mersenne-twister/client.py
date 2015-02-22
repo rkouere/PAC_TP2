@@ -61,41 +61,6 @@ server = Server(URL)
 
 
 # seed 1
-seed=server.query("/two-time-pad/challenge/echallier/1")
-question=server.query("/two-time-pad/question/echallier/1")
-
-APrime=seed['A'].encode()
-BPrime=seed['B'].encode()
-AXORB=xor(base64.b16decode(APrime), base64.b16decode(BPrime))
-AEncode=base64.b16decode(APrime)
-
-cpt = 0
-
-print(xor(AXORB, b'0' * 1000).decode())
-print('--------------')
-print(xor(AXORB, b'1' * 1000).decode())
-
-print(question)
-for i in range(0, len(AXORB)):
-  if AXORB[i]^ord('0') == ord('\n'):
-       print(i)
-  elif AXORB[i]^ord('1') == ord('\n'):
-      print(i)
-
-print('espace')
-for i in range(586, len(AXORB)):
-  if AXORB[i]^ord('0') == ord(' '):
-      cpt = cpt + 1 
-      print('i ' + str(i) + ' word ' + str(cpt))
-       
-  elif AXORB[i]^ord('1') == ord(' '):
-      cpt = cpt + 1 
-      print('i ' + str(i) + ' word ' + str(cpt))
-
-print('mot')
-for i in range(605, 613):
-  print(chr(AXORB[i]^ord('0')) + ' - ' + chr(AXORB[i]^ord('1')))
-
-
-print(server.query("/two-time-pad/answer/echallier/1", {'word': 'grill'}))
+challenge=server.query("/mersenne-twister/challenge/echallier")
+print(challenge)
 
