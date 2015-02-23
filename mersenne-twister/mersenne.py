@@ -114,7 +114,7 @@ class MersenneTwister:
 mt = MersenneTwister()
 mt.seed(0)
 test = []
-for i in range(2):
+for i in range(1):
    test.append(mt.rand())
 
 def unshiftRight(val, shift):
@@ -123,12 +123,24 @@ def unshiftRight(val, shift):
     return tmp
 
 def unshiftLeft(val, shift, mask):
-    tmp = val >> shift
+    """ je pense qu'il faut faire un masque de taille du shift pour avoir la bonne valeur
+    ex:
+    a = 100101
+    b = a << 4 = 1001010000
+    b & 4xxxxx = 010000
+    c = a xor b = 110101
+  
+"""
+    tmp = val << shift
     tmp = (val ^ tmp) & mask
     return tmp
 
 print("unshift")
-print(unshiftRight(test[0], 11))
-# crackTest = (254 << 3) & 0xb
-# print(unshiftLeft(crackTest, 3, 0xb))
+toShift = 2479041101
+toShift = unshiftRight(toShift, 18)
+print(toShift)
+#crackTest = (254 << 3) & 0xb
+#print(unshiftLeft(crackTest, 3, 0xb))
 #print(crackTest)
+print("--------------")
+print(unshiftLeft(toShift, 15, 4022730752))
