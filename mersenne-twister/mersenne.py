@@ -122,6 +122,7 @@ def unshiftRight(val, shift):
     tmp = val ^ tmp
     return tmp
 
+#def unshiftLeft(val, shift, mask):
 def unshiftLeft(val, shift, mask):
     """ je pense qu'il faut faire un masque de taille du shift pour avoir la bonne valeur
     ex:
@@ -131,16 +132,19 @@ def unshiftLeft(val, shift, mask):
     c = a xor b = 110101
   
 """
-    tmp = val << shift
-    tmp = (val ^ tmp) & mask
+    tmp = (val << shift) & 0xFFFFFFFF
+    tmp = (val ^ tmp)
+
     return tmp
 
 print("unshift")
-toShift = 2479041101
-toShift = unshiftRight(toShift, 18)
-print(toShift)
+test = 1000
+shiftedValue = test ^ (test >> 18)
+print(unshiftRight(shiftedValue, 18))
+shiftedValue = test ^ (test << 15)
+print(unshiftLeft(shiftedValue, 15, 4022730752))
 #crackTest = (254 << 3) & 0xb
 #print(unshiftLeft(crackTest, 3, 0xb))
 #print(crackTest)
 print("--------------")
-print(unshiftLeft(toShift, 15, 4022730752))
+#print(unshiftLeft(toShift, 15, 4022730752))
