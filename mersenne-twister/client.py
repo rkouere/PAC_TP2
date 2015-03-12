@@ -59,7 +59,6 @@ def xor(a, b):
 URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
 
-
 # seed 1
 challenge=server.query("/mersenne-twister/challenge/echallier")
 print(challenge)

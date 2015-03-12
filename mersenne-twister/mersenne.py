@@ -118,11 +118,12 @@ for i in range(1):
    test.append(mt.rand())
 
 def unshiftRight(val, shift):
-    tmp = val >> shift
-    tmp = val ^ tmp
-    return tmp
+    masq = val
+    while masq != 0:
+        masq = masq >> shift
+        val = val ^ masq
+    return val
 
-#def unshiftLeft(val, shift, mask):
 def unshiftLeft(val, shift, mask):
     """ je pense qu'il faut faire un masque de taille du shift pour avoir la bonne valeur
     ex:
@@ -132,15 +133,16 @@ def unshiftLeft(val, shift, mask):
     c = a xor b = 110101
   
 """
-    tmp = (val << shift) & 0xFFFFFFFF
-    tmp = (val ^ tmp)
-
-    return tmp
+    masq = val
+    while masq < 1000:
+        masq = masq << shift
+        val = (val ^ masq) & mask
+    return val
 
 print("unshift")
-test = 1000
-shiftedValue = test ^ (test >> 18)
-print(unshiftRight(shiftedValue, 18))
+test = 123456789
+shiftedValue = test ^ (test >> 1)
+print(unshiftRight(shiftedValue, 1))
 shiftedValue = test ^ (test << 15)
 print(unshiftLeft(shiftedValue, 15, 4022730752))
 #crackTest = (254 << 3) & 0xb
