@@ -3,6 +3,7 @@ import urllib.request
 import urllib.parse
 import urllib.error
 import base64
+import mersenne
 
 class ServerError(Exception):
     def __init__(self, code=None, msg=None):
@@ -60,6 +61,22 @@ URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
 
 # seed 1
-challenge=server.query("/mersenne-twister/challenge/echallier")
-print(challenge)
+challengeTxt=server.query("/mersenne-twister/challenge/echallier")
+challenge=challengeTxt['challenge']
+challengeRenv = []
+for i in range(624):
+    challengeRenv.append(mersenne.rev_f(challenge[i]))
 
+print(challenge[624])
+
+MersenneTwister = mersenne.MersenneTwister()
+
+youpiCaVaMarcher = MersenneTwister.set_state(challengeRenv)
+for i in range(624,1000):
+    MersenneTwister.rand()
+
+print("-------------- uuu")
+num =  MersenneTwister.rand()
+#print(challengeRenv)
+
+print(server.query("/mersenne-twister/prediction/echallier/" + str(num)))

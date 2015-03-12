@@ -100,16 +100,29 @@ class MersenneTwister:
 
     def _f(self, y):
         """function used to filter cells of the MT array."""
-        print(y)
         y ^= y >> 11
-        print(y)
         y ^= (y << 7) & 2636928640
-        print(y)
         y ^= (y << 15) & 4022730752
-        print(y)
         y ^= y >> 18
-        print(y)
         return y
+
+def f(y):
+    """function used to filter cells of the MT array."""
+    y ^= y >> 11
+    y ^= (y << 7) & 2636928640
+    y ^= (y << 15) & 4022730752
+    y ^= y >> 18
+    return y
+
+
+def rev_f(y):
+    y = unshiftRight(y, 18)
+    y = unshiftLeft(y, 15, 4022730752)
+    y = unshiftLeft(y, 7, 2636928640)
+    y = unshiftRight(y, 11)
+    return y
+
+
 
 mt = MersenneTwister()
 mt.seed(0)
@@ -132,21 +145,13 @@ def unshiftLeft(val, shift, mask):
     b & 4xxxxx = 010000
     c = a xor b = 110101
   
-"""
-    masq = val
-    while masq < 1000:
-        masq = masq << shift
-        val = (val ^ masq) & mask
+    """
+    maskTmp = val
+    while maskTmp != 0:
+        maskTmp = ((maskTmp << shift) & mask) & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        val = (val ^ maskTmp)
     return val
 
-print("unshift")
-test = 123456789
-shiftedValue = test ^ (test >> 1)
-print(unshiftRight(shiftedValue, 1))
-shiftedValue = test ^ (test << 15)
-print(unshiftLeft(shiftedValue, 15, 4022730752))
-#crackTest = (254 << 3) & 0xb
-#print(unshiftLeft(crackTest, 3, 0xb))
-#print(crackTest)
-print("--------------")
-#print(unshiftLeft(toShift, 15, 4022730752))
+# print("unshift")
+# test = 123456789123456789
+# print(rev_f(f(test)))
