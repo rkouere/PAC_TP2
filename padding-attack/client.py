@@ -66,11 +66,21 @@ server = Server(URL)
 
 
 # seed 1
+oracle="/padding-attack/oracle/echallier"
+
 seed=server.query("/padding-attack/challenge/echallier/1")
 cypher=seed['ciphertext']
 IV=seed['IV']
-
-#on va traiter les 32 derniers octets
+#on va traiter les 32 derniers chracter
 tmp = cypher[(len(cypher) - 32):]
 block = helpers.Block(tmp)
-print(block)
+
+#on a besoin d'un chiffre en random
+r=block.random()
+print(r.encode())
+print(base64.b16decode(r, casefold=True))
+# blockTmp = helpers.Block(base64.b16decode(r, casefold=True))
+# C=blockTmp.orStr(base64.b16decode(tmp[-1]))
+# print(C)
+
+#print(server.query(oracle, {"IV": IVHack, "ciphertext": cypher}))
