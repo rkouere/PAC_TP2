@@ -61,24 +61,6 @@ def xor(a, b):
                c.append(x ^ y)
            return c
 
-def getBloc(cypher, nbrBlock):
-    if nbrBlock*32 >= len(cypher):
-        return -1
-    else:
-        return cypher[nbrBlock * 32:(nbrBlock + 1) * 32]
-
-
-# get a seed with 01 as the last byte
-def getSeed(i):
-    while 1:
-        try:
-            seed = server.query("/padding-attack/last-byte/echallier/"+str(i), {"value": "01"})
-            if seed['status'] == 'OK':
-                print("seed working = " + str(i))
-                break
-        except:
-            print("seed dead")
-            i = i + 1
 
 
 URL="http://pac.bouillaguet.info/TP2"
@@ -88,37 +70,29 @@ server = Server(URL)
 # seed 1
 oracle="/padding-attack/oracle/echallier"
 
-seedNum = 3
-
-seed=server.query("/padding-attack/challenge/echallier/" + str(seedNum))
+seed=server.query("/padding-attack/challenge/echallier/3")
 cypher=seed['ciphertext']
 IV=seed['IV']
+#on va traiter les 32 derniers chracter
+ciphertext = cypher[(len(cypher) - 32):]
+# c'est le nombre que l'on va utiliser pour incrémenter le dernier bit
+i = 0
 
-C = getBloc(cypher, 11)
 
-# on va xorer la fin de C avec 01 puis avec 02 afin que sa valeur soit valide avec un padding de 2
-#On xor C avec le 01
-print(C)
-format = 1
-plaintext = "{0:032x}".format(format)
-C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+def getSeed():
+    print("salut")
 
-#On xor C avec le 02
-print('-------------')
-print(C)
-format = format + 1
-plaintext = "{0:032x}".format(format)
-C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+getSeed()
 
-print('-------------')
-C = list(C.decode())
-print(C)
-C[0] = 0
-print(''.join(C))
-# for i in range(20):
-#     format = 256 * (i + 1)
-#     plaintext = "{0:032x}".format(format)
-#     print(plaintext)
+while 1:
+    try:
+        seed = server.query("/padding-attack/last-byte/echallier/"+str(i), {"value": "01"})
+        if seed['status'] == 'OK':
+            print("seed working = " + str(i))
+            break
+    except:
+        print("seed dead")
+        i = i + 1
 
 
 # for i in range(256):
@@ -129,3 +103,25 @@ print(''.join(C))
 #     print("tmp = " + tmp.decode())
 #     print("plaintext = " + plaintext)
 #     print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
+
+# on va incrementer de 1 chaque mask
+# format = format + 255
+
+# plaintext = "{0:032x}".format(format)
+# tmp=base64.b16encode(xor(base64.b16decode(ciphertext), base64.b16decode(plaintext, casefold=True)))
+# format = format + 1
+# print(ciphertext)
+# print(tmp.decode())
+# print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
+
+
+
+
+#print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
+
+# print(len(ciphertext))
+# print(ciphertext)
+
+# tmp=base64.b16encode(xor(base64.b16decode(ciphertext), base64.b16decode(plaintext)))
+
+#print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
