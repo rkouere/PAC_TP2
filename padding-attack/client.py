@@ -61,6 +61,8 @@ def xor(a, b):
                c.append(x ^ y)
            return c
 
+
+
 URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
 
@@ -72,15 +74,41 @@ seed=server.query("/padding-attack/challenge/echallier/1")
 cypher=seed['ciphertext']
 IV=seed['IV']
 #on va traiter les 32 derniers chracter
-tmp = cypher[(len(cypher) - 32):]
-block = helpers.Block(tmp)
+ciphertext = cypher[(len(cypher) - 32):]
+IVTmp = 
+# c'est le nombre que l'on va utiliser pour incrémenter le dernier bit
+format = 0x00
+print(cypher)
+print(ciphertext)
+print(IVTmp)
 
-#on a besoin d'un chiffre en random
-r=block.random()
-print(r.encode())
-print(base64.b16decode(r, casefold=True))
-# blockTmp = helpers.Block(base64.b16decode(r, casefold=True))
-# C=blockTmp.orStr(base64.b16decode(tmp[-1]))
-# print(C)
+# for i in range(256):
+#     # on va incrementer de 1 le masque à chaque itérations
+#     plaintext = "{0:032x}".format(format)
+#     tmp=base64.b16encode(xor(base64.b16decode(ciphertext), base64.b16decode(plaintext, casefold=True)))
+#     format = format + 1
+#     print("tmp = " + tmp.decode())
+#     print("plaintext = " + plaintext)
+#     print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
 
-#print(server.query(oracle, {"IV": IVHack, "ciphertext": cypher}))
+# on va incrementer de 1 chaque mask
+# format = format + 255
+
+# plaintext = "{0:032x}".format(format)
+# tmp=base64.b16encode(xor(base64.b16decode(ciphertext), base64.b16decode(plaintext, casefold=True)))
+# format = format + 1
+# print(ciphertext)
+# print(tmp.decode())
+# print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
+
+
+
+
+#print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
+
+# print(len(ciphertext))
+# print(ciphertext)
+
+# tmp=base64.b16encode(xor(base64.b16decode(ciphertext), base64.b16decode(plaintext)))
+
+#print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))

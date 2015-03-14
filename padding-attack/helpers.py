@@ -155,19 +155,6 @@ class Block(bytearray):
         """
         return Block(bytes([ random.getrandbits(8) for i in range(n) ]))
 
-    def orStr(self, other):
-        """
-        XOR de deux blocs :
-        >>> a = Block([0x0f] * 16)
-        >>> b = Block([0x18] * 16)
-        >>> a ^ b
-        Block('17171717171717171717171717171717')
-        """
-        result = Block()
-        for i in range(len(self)):
-            result[i] = self[i] ^ other[i%len(other)]
-        return result
-
 
 class Message(list):
     """
