@@ -75,6 +75,7 @@ def getSeed(i):
             seed = server.query("/padding-attack/last-byte/echallier/"+str(i), {"value": "01"})
             if seed['status'] == 'OK':
                 print("seed working = " + str(i))
+                return i
                 break
         except:
             print("seed dead")
@@ -84,45 +85,113 @@ def getSeed(i):
 URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
 
-
-# seed 1
 oracle="/padding-attack/oracle/echallier"
 
 seedNum = 3
 
 seed=server.query("/padding-attack/challenge/echallier/" + str(seedNum))
+
+
 cypher=seed['ciphertext']
 IV=seed['IV']
 #le IV que l'on va manipuler
 C = getBloc(cypher, 11)
+C_original = getBloc(cypher, 11)
+
 #le ciphertext que l'on va envoyer
 cipherTextHack = getBloc(cypher, 12)
-
+#le valeur intermediaire que l'on cherche a trouver
+index_du_cypher = "01"
+IntValue = []
+CLimiter = 32
+#IntValue.insert(0, 0x)
+print(C)
+print("--------")
 # on va xorer la fin de C avec 01 puis avec 02 afin que sa valeur soit valide avec un padding de 2
+#on va avoir un compteur pour changer les bon octets de l'IV
+# comptIV = 1
+# for y in range(comptIV):
+#     format = y+1
+#     plaintext = "{0:032x}".format(format)
+#     C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+
+#     #On xor C avec le 02
+#     format = format + 1
+#     plaintext = "{0:032x}".format(format)
+#     C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+
+
+
+
 #On xor C avec le 01
-format = 1
+print(C)
+
+# on change la valeur des bytes à 1 et on va les incrementer
+#C = C.decode()
+C = C[0:CLimiter-2] + "00" + C[CLimiter:CLimiter+2]
+print(C)
+
+# on va essayer de trouver la valeur intermediaire dont on a besoin pour avoir la valeur que l'on veut
+format = 0x79
+for i in range(0x79, 256):
+    # on va incrementer de 1 le masque à chaque itérations
+    plaintext = "{0:032x}".format(format)
+    IV_tmp=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+    format = (i + 1)
+    print("plaintext = " + plaintext)
+    result = server.query(oracle, {"IV": IV_tmp.decode(), "ciphertext": cipherTextHack})
+    if(result['status'] == 'OK'):
+        # on a besoin de tout transofmer en bytes pour pouvoir utiliser la fonction xor
+        tmp1 = base64.b16decode(IV_tmp[CLimiter-2:CLimiter])
+        tmp2 = base64.b16decode(index_du_cypher.encode()) 
+        
+        IntValue.insert(int(index_du_cypher)-1, base64.b16encode(xor(tmp1, tmp2)).decode())
+        break
+
+
+iterator = int(index_du_cypher)
+C=getBloc(cypher, 11)
+# on va faire le xor qu'il faut pour recuperer 
+tmp1 = base64.b16decode(C[30:32])
+tmp2 = base64.b16decode(IntValue[-iterator])
+value_of_plainText = base64.b16encode(xor(tmp1, tmp2))
+print(base64.b16decode(value_of_plainText))
+print("---------")
+tmp2 = base64.b16encode(xor(base64.b16decode(value_of_plainText), tmp1))
+print(tmp2)
+print("----------")
+iterator = 1
+# on va xorer la fin de C avec la valeur que l'on connait de la fin du ciphertext puis avec 02 afin que sa valeur soit valide avec un padding de 2
+# on a vire C donc il faut le recuperer
+valuePadding = iterator + 1
+format = IntValue[-iterator]
 plaintext = "{0:032x}".format(format)
 C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
 
 #On xor C avec le 02
-format = format + 1
+format = valuePadding
 plaintext = "{0:032x}".format(format)
 C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
 
-# on change la valeur des bytes à 1 et on va les incrementer
-C = C.decode()
-C = C[0:28] + "00" + C[30:32]
 
-for i in range(100, 256):
-    # on va incrementer de 1 le masque à chaque itérations
-    plaintext = "{0:032x}".format(format)
-    tmp=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
-    format = 256 * (i + 1)
-    # print("plaintext = " + plaintext)
-    result = server.query(oracle, {"IV": tmp.decode(), "ciphertext": cipherTextHack})
-    if(result['status'] == 'OK'):
-        print(tmp.decode())
-        break
+# ORIGINAL marche avec 1
+# on va xorer la fin de C avec la valeur que l'on connait de la fin du ciphertext puis avec 02 afin que sa valeur soit valide avec un padding de 2
+# iterator = 1
+# valuePadding = iterator + 1
+# format = IntValue[-iterator]
+# plaintext = "{0:032x}".format(format)
+# C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
 
+# #On xor C avec le 02
+# format = valuePadding
+# plaintext = "{0:032x}".format(format)
+# C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
 
 
+
+index_du_cypher = str(int(index_du_cypher)+1)
+
+
+
+print(IntValue[0])
+print(index_du_cypher)
