@@ -3,11 +3,6 @@ import urllib.request
 import urllib.parse
 import urllib.error
 import base64
-import helpers
-
-
-# excelente explication
-#http://blog.gdssecurity.com/labs/2010/9/14/automated-padding-oracle-attacks-with-padbuster.html
 
 class ServerError(Exception):
     def __init__(self, code=None, msg=None):
@@ -61,67 +56,27 @@ def xor(a, b):
                c.append(x ^ y)
            return c
 
-
-
 URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
 
 
 # seed 1
-oracle="/padding-attack/oracle/echallier"
+seed=server.query("/two-time-pad/challenge/echallier/1")
+question=server.query("/two-time-pad/question/echallier/1")
 
-seed=server.query("/padding-attack/challenge/echallier/3")
-cypher=seed['ciphertext']
-IV=seed['IV']
-#on va traiter les 32 derniers chracter
-ciphertext = cypher[(len(cypher) - 32):]
-# c'est le nombre que l'on va utiliser pour incrémenter le dernier bit
-i = 0
+APrime=seed['A'].encode()
+BPrime=seed['B'].encode()
+AXORB=xor(base64.b16decode(APrime), base64.b16decode(BPrime))
+AEncode=base64.b16decode(APrime)
 
-
-def getSeed():
-    print("salut")
-
-getSeed()
-
-while 1:
-    try:
-        seed = server.query("/padding-attack/last-byte/echallier/"+str(i), {"value": "01"})
-        if seed['status'] == 'OK':
-            print("seed working = " + str(i))
-            break
-    except:
-        print("seed dead")
-        i = i + 1
+for i in range(0, len(AEncode)):
+                print(AXORB[i]^0x49)
+#print(yo)
+#print(chr(AEncode[3]^0x49))
 
 
-# for i in range(256):
-#     # on va incrementer de 1 le masque à chaque itérations
-#     plaintext = "{0:032x}".format(format)
-#     tmp=base64.b16encode(xor(base64.b16decode(ciphertext), base64.b16decode(plaintext, casefold=True)))
-#     format = format + 1
-#     print("tmp = " + tmp.decode())
-#     print("plaintext = " + plaintext)
-#     print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
+#inverse chr ord prend une string et remplace en ASCII
+#print(question)
 
-# on va incrementer de 1 chaque mask
-# format = format + 255
-
-# plaintext = "{0:032x}".format(format)
-# tmp=base64.b16encode(xor(base64.b16decode(ciphertext), base64.b16decode(plaintext, casefold=True)))
-# format = format + 1
-# print(ciphertext)
-# print(tmp.decode())
-# print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
-
-
-
-
-#print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
-
-# print(len(ciphertext))
-# print(ciphertext)
-
-# tmp=base64.b16encode(xor(base64.b16decode(ciphertext), base64.b16decode(plaintext)))
-
-#print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
+#AXORB=xor(seed['A'], seed['B'])
+# print(AXORB)

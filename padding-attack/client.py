@@ -93,39 +93,36 @@ seedNum = 3
 seed=server.query("/padding-attack/challenge/echallier/" + str(seedNum))
 cypher=seed['ciphertext']
 IV=seed['IV']
-
+#le IV que l'on va manipuler
 C = getBloc(cypher, 11)
+#le ciphertext que l'on va envoyer
+cipherTextHack = getBloc(cypher, 12)
 
 # on va xorer la fin de C avec 01 puis avec 02 afin que sa valeur soit valide avec un padding de 2
 #On xor C avec le 01
-print(C)
 format = 1
 plaintext = "{0:032x}".format(format)
 C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
 
 #On xor C avec le 02
-print('-------------')
-print(C)
 format = format + 1
 plaintext = "{0:032x}".format(format)
 C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
 
-print('-------------')
-C = list(C.decode())
-print(C)
-C[0] = 0
-print(''.join(C))
-# for i in range(20):
-#     format = 256 * (i + 1)
-#     plaintext = "{0:032x}".format(format)
-#     print(plaintext)
+# on change la valeur des bytes à 1 et on va les incrementer
+C = C.decode()
+C = C[0:28] + "00" + C[30:32]
+
+for i in range(100, 256):
+    # on va incrementer de 1 le masque à chaque itérations
+    plaintext = "{0:032x}".format(format)
+    tmp=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+    format = 256 * (i + 1)
+    # print("plaintext = " + plaintext)
+    result = server.query(oracle, {"IV": tmp.decode(), "ciphertext": cipherTextHack})
+    if(result['status'] == 'OK'):
+        print(tmp.decode())
+        break
 
 
-# for i in range(256):
-#     # on va incrementer de 1 le masque à chaque itérations
-#     plaintext = "{0:032x}".format(format)
-#     tmp=base64.b16encode(xor(base64.b16decode(ciphertext), base64.b16decode(plaintext, casefold=True)))
-#     format = format + 1
-#     print("tmp = " + tmp.decode())
-#     print("plaintext = " + plaintext)
-#     print(server.query(oracle, {"IV": ciphertext, "ciphertext": tmp.decode()}))
+
