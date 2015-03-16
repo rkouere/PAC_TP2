@@ -81,6 +81,11 @@ def getSeed(i):
             print("seed dead")
             i = i + 1
 
+def bytes_to_hex(bytes_to_encode):
+    return base64.b16encode(bytes_to_encode)
+
+def string_hex_to_bytes(string_to_encode):
+    return base64.b16decode(string_to_encode.encode())
 
 URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
@@ -142,36 +147,58 @@ for i in range(0x79, 256):
     result = server.query(oracle, {"IV": IV_tmp.decode(), "ciphertext": cipherTextHack})
     if(result['status'] == 'OK'):
         # on a besoin de tout transofmer en bytes pour pouvoir utiliser la fonction xor
+        # on a besoin du C
         tmp1 = base64.b16decode(IV_tmp[CLimiter-2:CLimiter])
-        tmp2 = base64.b16decode(index_du_cypher.encode()) 
-        
-        IntValue.insert(int(index_du_cypher)-1, base64.b16encode(xor(tmp1, tmp2)).decode())
+        # on a besoin de l'index pour connaitre la valeur que l'on "hackait"
+        tmp2 = base64.b16decode(index_du_cypher.encode())
+        # la valeur intermediaire
+        tmp3 = base64.b16encode(xor(tmp1, tmp2)).decode()
+        IntValue.insert(-int(index_du_cypher), base64.b16encode(xor(base64.b16decode(C_original[CLimiter-2:CLimiter]), base64.b16decode(tmp3))).decode())
         break
+
+
+
 
 
 iterator = int(index_du_cypher)
 C=getBloc(cypher, 11)
 # on va faire le xor qu'il faut pour recuperer 
-tmp1 = base64.b16decode(C[30:32])
-tmp2 = base64.b16decode(IntValue[-iterator])
-value_of_plainText = base64.b16encode(xor(tmp1, tmp2))
-print(base64.b16decode(value_of_plainText))
-print("---------")
-tmp2 = base64.b16encode(xor(base64.b16decode(value_of_plainText), tmp1))
-print(tmp2)
-print("----------")
-iterator = 1
-# on va xorer la fin de C avec la valeur que l'on connait de la fin du ciphertext puis avec 02 afin que sa valeur soit valide avec un padding de 2
-# on a vire C donc il faut le recuperer
-valuePadding = iterator + 1
-format = IntValue[-iterator]
-plaintext = "{0:032x}".format(format)
-C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+tmp1 = string_hex_to_bytes(C[CLimiter-2:CLimiter])
+tmp2 = string_hex_to_bytes(IntValue[-int(index_du_cypher)])
 
-#On xor C avec le 02
-format = valuePadding
-plaintext = "{0:032x}".format(format)
-C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+print(bytes_to_hex(xor(tmp1, tmp2)))
+index_du_cypher = str(int(index_du_cypher) + 1)
+C = C[0:CLimiter-2] + "00" + C[CLimiter:CLimiter+2]
+
+
+
+
+
+
+
+
+
+
+# tmp1 = base64.b16decode(C[30:32])
+# tmp2 = base64.b16decode(IntValue[-iterator])
+# value_of_plainText = base64.b16encode(xor(tmp1, tmp2))
+# print(base64.b16decode(value_of_plainText))
+# print("---------")
+# tmp2 = base64.b16encode(xor(base64.b16decode(value_of_plainText), tmp1))
+# print(tmp2)
+# print("----------")
+# iterator = 1
+# # on va xorer la fin de C avec la valeur que l'on connait de la fin du ciphertext puis avec 02 afin que sa valeur soit valide avec un padding de 2
+# # on a vire C donc il faut le recuperer
+# valuePadding = iterator + 1
+# format = IntValue[-iterator]
+# plaintext = "{0:032x}".format(format)
+# C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+
+# #On xor C avec le 02
+# format = valuePadding
+# plaintext = "{0:032x}".format(format)
+# C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
 
 
 # ORIGINAL marche avec 1
@@ -187,11 +214,3 @@ C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold
 # plaintext = "{0:032x}".format(format)
 # C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
 
-
-
-index_du_cypher = str(int(index_du_cypher)+1)
-
-
-
-print(IntValue[0])
-print(index_du_cypher)
