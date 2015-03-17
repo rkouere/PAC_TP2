@@ -81,19 +81,44 @@ def getSeed(i):
             print("seed dead")
             i = i + 1
 
+def nbr_to_hexa(nbr):
+    return "{0:002x}".format(nbr)
+
 def bytes_to_hex(bytes_to_encode):
-    return base64.b16encode(bytes_to_encode)
+    return base64.b16encode(bytes_to_encode).decode()
 
 def string_hex_to_bytes(string_to_encode):
     return base64.b16decode(string_to_encode.encode())
 
+# permet de connaitre la valeur originel du block C à l'index "index/256"
+def find_value_plaintext(index):
+    format = 0x78
+    for i in range(format, 256):
+        # on va incrementer de 1 le masque à chaque itérations
+        plaintext = "{0:032x}".format(format)
+        IV_tmp=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+        format = format_index * (i + 1)
+        result = server.query(oracle, {"IV": IV_tmp.decode(), "ciphertext": cipherTextHack})
+        if(result['status'] == 'OK'):
+            # on a besoin de tout transofmer en bytes pour pouvoir utiliser la fonction xor
+            # on a besoin du C
+            tmp1 = base64.b16decode(IV_tmp[CLimiter-2:CLimiter])
+            # on a besoin de l'index pour connaitre la valeur que l'on "hackait"
+            tmp2 = base64.b16decode(nbr_to_hexa(index_du_cypher))
+            # la valeur intermediaire
+            tmp3 = base64.b16encode(xor(tmp1, tmp2)).decode()
+            IntValue.insert(-int(index_du_cypher), base64.b16encode(xor(base64.b16decode(C_original[CLimiter-2:CLimiter]), base64.b16decode(tmp3))).decode())
+            return index * 256
+            break
+
+
+
+
+# DEFINITION DES VARIABLES
 URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
-
 oracle="/padding-attack/oracle/echallier"
-
 seedNum = 3
-
 seed=server.query("/padding-attack/challenge/echallier/" + str(seedNum))
 
 
@@ -102,81 +127,66 @@ IV=seed['IV']
 #le IV que l'on va manipuler
 C = getBloc(cypher, 11)
 C_original = getBloc(cypher, 11)
-
+print(C_original)
+print("--------")
 #le ciphertext que l'on va envoyer
 cipherTextHack = getBloc(cypher, 12)
 #le valeur intermediaire que l'on cherche a trouver
-index_du_cypher = "01"
+index_du_cypher = 0x01
 IntValue = []
 CLimiter = 32
-#IntValue.insert(0, 0x)
-print(C)
-print("--------")
-# on va xorer la fin de C avec 01 puis avec 02 afin que sa valeur soit valide avec un padding de 2
-#on va avoir un compteur pour changer les bon octets de l'IV
-# comptIV = 1
-# for y in range(comptIV):
-#     format = y+1
-#     plaintext = "{0:032x}".format(format)
-#     C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+#utilise pour gerer la place du mask
+format_index = 1
 
-#     #On xor C avec le 02
-#     format = format + 1
-#     plaintext = "{0:032x}".format(format)
-#     C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
+# FIN DEFINITION DES VARIABLES
 
-
-
-
-#On xor C avec le 01
-print(C)
 
 # on change la valeur des bytes à 1 et on va les incrementer
 #C = C.decode()
 C = C[0:CLimiter-2] + "00" + C[CLimiter:CLimiter+2]
-print(C)
 
 # on va essayer de trouver la valeur intermediaire dont on a besoin pour avoir la valeur que l'on veut
-format = 0x79
-for i in range(0x79, 256):
-    # on va incrementer de 1 le masque à chaque itérations
-    plaintext = "{0:032x}".format(format)
-    IV_tmp=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
-    format = (i + 1)
-    print("plaintext = " + plaintext)
-    result = server.query(oracle, {"IV": IV_tmp.decode(), "ciphertext": cipherTextHack})
-    if(result['status'] == 'OK'):
-        # on a besoin de tout transofmer en bytes pour pouvoir utiliser la fonction xor
-        # on a besoin du C
-        tmp1 = base64.b16decode(IV_tmp[CLimiter-2:CLimiter])
-        # on a besoin de l'index pour connaitre la valeur que l'on "hackait"
-        tmp2 = base64.b16decode(index_du_cypher.encode())
-        # la valeur intermediaire
-        tmp3 = base64.b16encode(xor(tmp1, tmp2)).decode()
-        IntValue.insert(-int(index_du_cypher), base64.b16encode(xor(base64.b16decode(C_original[CLimiter-2:CLimiter]), base64.b16decode(tmp3))).decode())
-        break
+format_index = find_value_plaintext(format_index)
+print(IntValue[-int(index_du_cypher)])
 
 
-
-
-
-iterator = int(index_du_cypher)
 C=getBloc(cypher, 11)
 # on va faire le xor qu'il faut pour recuperer 
 tmp1 = string_hex_to_bytes(C[CLimiter-2:CLimiter])
 tmp2 = string_hex_to_bytes(IntValue[-int(index_du_cypher)])
+tmp3 = bytes_to_hex(xor(tmp1, tmp2))
 
-print(bytes_to_hex(xor(tmp1, tmp2)))
-index_du_cypher = str(int(index_du_cypher) + 1)
+index_du_cypher = index_du_cypher + 1
+val_C_to_replace = bytes_to_hex(xor(string_hex_to_bytes(nbr_to_hexa(index_du_cypher)), string_hex_to_bytes(tmp3)))
+
+C = C[0:CLimiter-2] + val_C_to_replace + C[CLimiter:]
+CLimiter = CLimiter - 2
 C = C[0:CLimiter-2] + "00" + C[CLimiter:CLimiter+2]
+format_index = find_value_plaintext(format_index)
+
+print(IntValue[-int(index_du_cypher)])
+
+print("nouveau!!!!")
+
+# nv
+C=getBloc(cypher, 11)
+# on va faire le xor qu'il faut pour recuperer 
+tmp1 = string_hex_to_bytes(C[CLimiter-2:CLimiter])
+tmp2 = string_hex_to_bytes(IntValue[-int(index_du_cypher)])
+tmp3 = bytes_to_hex(xor(tmp1, tmp2))
+
+index_du_cypher = index_du_cypher + 1
+val_C_to_replace = bytes_to_hex(xor(string_hex_to_bytes(nbr_to_hexa(index_du_cypher)), string_hex_to_bytes(tmp3)))
+
+C = C[0:CLimiter-2] + val_C_to_replace + C[CLimiter:]
+CLimiter = CLimiter - 2
+C = C[0:CLimiter-2] + "00" + C[CLimiter:]
+print(C_original)
+print(C)
+format_index = find_value_plaintext(format_index)
 
 
-
-
-
-
-
-
+print(IntValue[-int(index_du_cypher)])
 
 
 # tmp1 = base64.b16decode(C[30:32])
