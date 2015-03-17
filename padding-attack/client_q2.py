@@ -14,7 +14,7 @@ import helpers
 
 DEBUG = 0
 index_du_cypher = 0x01
-format_index = 1
+format_index = 256
 IntValue = []
 #le valeur intermediaire que l'on cherche a trouver
 CLimiterOriginal = 32
@@ -162,7 +162,10 @@ def init_block_cracked_oracle():
 URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
 oracle="/padding-attack/oracle/echallier"
-seedNum = 3
+seedNum = 135
+
+#print(getSeed(51))
+
 seed=server.query("/padding-attack/challenge/echallier/" + str(seedNum))
 
 
@@ -181,75 +184,23 @@ cipherTextHack = getBloc(cypher, 12)
 # FIN DEFINITION DES VARIABLES
 
 
-# on change la valeur des bytes à 1 et on va les incrementer
-#C = C.decode()
-C = C[0:CLimiter-2] + "00" + C[CLimiter:CLimiter+2]
+# A faire
+# 1
+# IntValue.append("01")
+# for i in range(16):
+#     print("---------")
+#     C=init_block_cracked_oracle()
+#     print(C)
+#     format_index = find_value_plaintext(format_index)
+#     print(IntValue)
+#     print("---------")
 
-# on va essayer de trouver la valeur intermediaire dont on a besoin pour avoir la valeur que l'on veut
-# format_index = find_value_plaintext(format_index)
+# 2 recuperer l'array et la copier dans resArr
 
-IntValue.append("61")
-IntValue.append("65")
-IntValue.append("36")
-IntValue.append("35")
-IntValue.append("32")
-IntValue.append("38")
-IntValue.append("31")
-IntValue.append("32")
-IntValue.append("34")
-IntValue.append("01")
+resArr = ['36', '63', '66', '65', '33', '38', '61', '64', '39', '32', '35', '30', '34', '33', '32', '01']
+resStr = ""
+for i in range(len(resArr)):
+    resStr += resArr[i]
 
-format_index = 256 ** 10
-index_du_cypher = index_du_cypher + 9
-
-
-print(IntValue)
-
-for i in range(15):
-    print("---------")
-    C=init_block_cracked_oracle()
-    print(C)
-    format_index = find_value_plaintext(format_index)
-    print(IntValue)
-    print("---------")
-
-
-print(IntValue[-int(index_du_cypher)])
-
-
-
-# tmp1 = base64.b16decode(C[30:32])
-# tmp2 = base64.b16decode(IntValue[-iterator])
-# value_of_plainText = base64.b16encode(xor(tmp1, tmp2))
-# print(base64.b16decode(value_of_plainText))
-# print("---------")
-# tmp2 = base64.b16encode(xor(base64.b16decode(value_of_plainText), tmp1))
-# print(tmp2)
-# print("----------")
-# iterator = 1
-# # on va xorer la fin de C avec la valeur que l'on connait de la fin du ciphertext puis avec 02 afin que sa valeur soit valide avec un padding de 2
-# # on a vire C donc il faut le recuperer
-# valuePadding = iterator + 1
-# format = IntValue[-iterator]
-# plaintext = "{0:032x}".format(format)
-# C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
-
-# #On xor C avec le 02
-# format = valuePadding
-# plaintext = "{0:032x}".format(format)
-# C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
-
-
-# ORIGINAL marche avec 1
-# on va xorer la fin de C avec la valeur que l'on connait de la fin du ciphertext puis avec 02 afin que sa valeur soit valide avec un padding de 2
-# iterator = 1
-# valuePadding = iterator + 1
-# format = IntValue[-iterator]
-# plaintext = "{0:032x}".format(format)
-# C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
-
-# #On xor C avec le 02
-# format = valuePadding
-# plaintext = "{0:032x}".format(format)
-# C=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
-
+# enjoy !
+print(server.query("/padding-attack/last-block/echallier/"+str(seedNum), {'value': resStr}))
