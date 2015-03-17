@@ -58,14 +58,12 @@ def xor(a, b):
 
 URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
-f = open("m1_1.md5", "rb")
-m0 = base64.b16encode(f.read()).decode()
 
-f = open("m1_2.md5", "rb")
-m1 = base64.b16encode(f.read()).decode()
+f = open("ex1_1.txt", "rb")
+m0 = base64.b16encode(f.read())
 
-f = open("m1.txt", "r")
-prefix = f.read()
-prefix = base64.b16encode(prefix.encode()).decode()
+f = open("ex1_2.txt", "rb")
+m1 = base64.b16encode(f.read())
 
-print(server.query("/md5-collisions/checker/echallier", {0: prefix+m0, 1: prefix+m1}))
+
+print(server.query("/md5-collisions/checker/echallier", {0: m0.decode(), 1: m1.decode()}))
