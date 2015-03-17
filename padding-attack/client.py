@@ -92,12 +92,12 @@ def string_hex_to_bytes(string_to_encode):
 
 # permet de connaitre la valeur originel du block C à l'index "index/256"
 def find_value_plaintext(index):
-    format = 0x78
-    for i in range(format, 256):
+    format = index * 0xB8
+    for i in range(0xB8, 256):
         # on va incrementer de 1 le masque à chaque itérations
         plaintext = "{0:032x}".format(format)
         IV_tmp=base64.b16encode(xor(base64.b16decode(C), base64.b16decode(plaintext, casefold=True)))
-        format = format_index * (i + 1)
+        format = index * (i + 1)
         result = server.query(oracle, {"IV": IV_tmp.decode(), "ciphertext": cipherTextHack})
         if(result['status'] == 'OK'):
             # on a besoin de tout transofmer en bytes pour pouvoir utiliser la fonction xor
@@ -137,6 +137,8 @@ IntValue = []
 CLimiter = 32
 #utilise pour gerer la place du mask
 format_index = 1
+#index qui permet de parcourir le bloc et ded changer les valeures lorsque l'on veut avoir un xor avec 1, 2, 3 etc...
+index_boucle_manip_c = 2
 
 # FIN DEFINITION DES VARIABLES
 
@@ -146,29 +148,57 @@ format_index = 1
 C = C[0:CLimiter-2] + "00" + C[CLimiter:CLimiter+2]
 
 # on va essayer de trouver la valeur intermediaire dont on a besoin pour avoir la valeur que l'on veut
-format_index = find_value_plaintext(format_index)
+# format_index = find_value_plaintext(format_index)
+
+IntValue.insert(-1, "01")
+format_index = 256
 print(IntValue[-int(index_du_cypher)])
 
+# on a besoin de recuperer le C original pour pouvoir effectuer les operation dont on a besoin
+C=C_original
+# on va faire le xor qu'il faut pour recuperer
 
-C=getBloc(cypher, 11)
-# on va faire le xor qu'il faut pour recuperer 
 tmp1 = string_hex_to_bytes(C[CLimiter-2:CLimiter])
 tmp2 = string_hex_to_bytes(IntValue[-int(index_du_cypher)])
 tmp3 = bytes_to_hex(xor(tmp1, tmp2))
-
 index_du_cypher = index_du_cypher + 1
 val_C_to_replace = bytes_to_hex(xor(string_hex_to_bytes(nbr_to_hexa(index_du_cypher)), string_hex_to_bytes(tmp3)))
-
 C = C[0:CLimiter-2] + val_C_to_replace + C[CLimiter:]
 CLimiter = CLimiter - 2
 C = C[0:CLimiter-2] + "00" + C[CLimiter:CLimiter+2]
+print("C avant function")
+print(C)
 format_index = find_value_plaintext(format_index)
-
 print(IntValue[-int(index_du_cypher)])
+
+# # 02
+# # on a besoin du block non change
+# C=C_original
+# # on va faire le xor qu'il faut pour recuperer 
+# for i in range(index_boucle_manip_c-1):
+#     CLimiterTmp = CLimiter
+#     tmp1 = string_hex_to_bytes(C[CLimiterTmp-2:CLimiterTmp])
+#     tmp2 = string_hex_to_bytes(IntValue[-int(i)])
+#     tmp3 = bytes_to_hex(xor(tmp1, tmp2))
+    
+#     val_C_to_replace = bytes_to_hex(xor(string_hex_to_bytes(nbr_to_hexa(index_du_cypher + 1)), string_hex_to_bytes(tmp3)))
+    
+#     C = C[0:CLimiterTmp-2] + val_C_to_replace + C[CLimiterTmp:]
+#     CLimiterTmp = CLimiterTmp - 2
+#     C = C[0:CLimiterTmp-2] + "00" + C[CLimiterTmp:CLimiterTmp+2]
+
+# print(C)
+
+# index_du_cypher = index_du_cypher + 1
+# format_index = find_value_plaintext(format_index)
+    
+# print(IntValue[-int(index_du_cypher)])
 
 print("nouveau!!!!")
 
 # nv
+
+
 C=getBloc(cypher, 11)
 # on va faire le xor qu'il faut pour recuperer 
 tmp1 = string_hex_to_bytes(C[CLimiter-2:CLimiter])
