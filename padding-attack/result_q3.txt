@@ -1,3 +1,7 @@
+index du block (depuis la fin) = 11
+Block traite =    373F82A53452550CFA8A3559AC52AD2A
+373F82A53452550CFA8A3559AC52AD00
+['36', '63', '66', '65', '33', '38', '61', '64', '39', '32', '35', '30', '34', '33', '32', '01']
 ---------
 index du block (depuis la fin) = 4
 Block traite =    5D0C5BF87F0CB23208134D6E700D1CBF
