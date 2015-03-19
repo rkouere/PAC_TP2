@@ -189,7 +189,7 @@ print(index_block)
 #le IV que l'on va manipuler
 
 # debut boucle
-for i in range(begining_index_block, index_block):
+for i in range(begining_index_block, index_block + 1):
     C = getBloc(cypher, index_block)
     C_original = getBloc(cypher, index_block)
     index_du_cypher = 0x01
@@ -227,40 +227,42 @@ for i in range(begining_index_block, index_block):
 
 
 #dernier avec IV
-C = IV
-C_original = IV
-index_du_cypher = 0x01
-format_index = 1
-IntValue = []
-#le valeur intermediaire que l'on cherche a trouver
-CLimiterOriginal = 32
-CLimiter = CLimiterOriginal
-
-print("--------- IV -----------")
-print("index du block (depuis la fin) = " + str(index_block))
-print("Block traite =    " + C_original)
-#le ciphertext que l'on va envoyer
-cipherTextHack = getBloc(cypher, index_block + 1)
-#utilise pour gerer la place du mask
-#index qui permet de parcourir le bloc et ded changer les valeures lorsque l'on veut avoir un xor avec 1, 2, 3 etc...
-
-# FIN DEFINITION DES VARIABLES
-
-
-# on calcul le premier chara
-
-C = C[0:CLimiter-2] + "00" + C[CLimiter:]
-print(C)
-format_index = find_value_plaintext(format_index)
-
-# on calcul le reste
-for i in range(15):
-    C=init_block_cracked_oracle()
+if(index_block == 0):
+    C = IV
+    C_original = IV
+    index_du_cypher = 0x01
+    format_index = 1
+    IntValue = []
+    #le valeur intermediaire que l'on cherche a trouver
+    CLimiterOriginal = 32
+    CLimiter = CLimiterOriginal
+    
+    print("--------- IV -----------")
+    print("index du block (depuis la fin) = " + str(index_block))
+    print("Block traite =    " + C_original)
+    #le ciphertext que l'on va envoyer
+    cipherTextHack = getBloc(cypher, index_block + 1)
+    #utilise pour gerer la place du mask
+    #index qui permet de parcourir le bloc et ded changer les valeures lorsque l'on veut avoir un xor avec 1, 2, 3 etc...
+    
+    # FIN DEFINITION DES VARIABLES
+    
+    
+    # on calcul le premier chara
+    
+    C = C[0:CLimiter-2] + "00" + C[CLimiter:]
+    print(C)
     format_index = find_value_plaintext(format_index)
-print("valeur reel du bloque")
-print(IntValue)
-index_block = index_block - 1
-print("---------")
+    
+    # on calcul le reste
+    for i in range(15):
+        C=init_block_cracked_oracle()
+        format_index = find_value_plaintext(format_index)
+
+    print("valeur reel du bloque")
+    print(IntValue)
+    index_block = index_block - 1
+    print("---------")
 
 
 
