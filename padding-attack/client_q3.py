@@ -241,7 +241,7 @@ if(index_block == 0):
     print("index du block (depuis la fin) = " + str(index_block))
     print("Block traite =    " + C_original)
     #le ciphertext que l'on va envoyer
-    cipherTextHack = getBloc(cypher, index_block + 1)
+    cipherTextHack = getBloc(cypher, index_block)
     #utilise pour gerer la place du mask
     #index qui permet de parcourir le bloc et ded changer les valeures lorsque l'on veut avoir un xor avec 1, 2, 3 etc...
     
