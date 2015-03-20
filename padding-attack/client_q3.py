@@ -134,7 +134,7 @@ def find_value_plaintext(index):
             if(DEBUG):
                 print("IntValue")
                 print(IntValue[-int(index_du_cypher)])
-            print(IntValue)
+            # print(IntValue)
             return index * 256
             break
 

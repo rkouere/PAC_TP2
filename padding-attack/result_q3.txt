@@ -1,68 +1,76 @@
-index du block (depuis la fin) = 11
-Block traite =    373F82A53452550CFA8A3559AC52AD2A
-373F82A53452550CFA8A3559AC52AD00
-['36', '63', '66', '65', '33', '38', '61', '64', '39', '32', '35', '30', '34', '33', '32', '01']
 ---------
 index du block (depuis la fin) = 10
-Block traite =    F819D6DFF8EA9B00F8F2270994E164D4
-F819D6DFF8EA9B00F8F2270994E16400
-['30', '64', '32', '66', '65', '36', '64', '39', '38', '66', '34', '34', '66', '61', '31', '63']
+Block traite =    4813C2361330A62D6DC392881A2A0D1D
+4813C2361330A62D6DC392881A2A0D00
+valeur reel du bloque
+['62', '36', '33', '61', '63', '65', '30', '62', '36', '62', '66', '64', '39', '65', '33', '32']
 ---------
 ---------
 index du block (depuis la fin) = 9
-Block traite =    D2A34ED038792ED3C4929FD69E490B83
-D2A34ED038792ED3C4929FD69E490B00
-['6A', '75', '6E', '6B', '3A', '20', '66', '6F', '6F', '0A', '6D', '61', '63', '3A', '20', '32']
+Block traite =    2F31B1CEE597B615CE6A0D28D4B883F3
+2F31B1CEE597B615CE6A0D28D4B88300
+valeur reel du bloque
+['6A', '75', '6E', '6B', '3A', '20', '66', '0A', '6D', '61', '63', '3A', '20', '33', '36', '35']
+---------
 ---------
 index du block (depuis la fin) = 8
-Block traite =    213F6BB1DFA306BA99B47C5EEA591A76
-213F6BB1DFA306BA99B47C5EEA591A00
-['35', '0A', '70', '73', '65', '75', '64', '6F', '2D', '72', '61', '6E', '64', '6F', '6D', '20']
+Block traite =    658384CB1CE8E1E5B7894E2EEB1D0094
+658384CB1CE8E1E5B7894E2EEB1D0000
+valeur reel du bloque
+['36', '0A', '70', '73', '65', '75', '64', '6F', '2D', '72', '61', '6E', '64', '6F', '6D', '20']
 ---------
-ndex du block (depuis la fin) = 7
-Block traite =    3F53EA7AF51CDBCEA06D0EFC32EE9E3E
-3F53EA7AF51CDBCEA06D0EFC32EE9E00
+---------
+index du block (depuis la fin) = 7
+Block traite =    66E4B18A1F581F5DE4CDB46D5307B3DD
+66E4B18A1F581F5DE4CDB46D5307B300
+valeur reel du bloque
 ['73', '33', '72', '76', '33', '72', '0A', '0A', '73', '65', '65', '64', '3A', '20', '31', '33']
 ---------
+---------
 index du block (depuis la fin) = 6
-Block traite =    F8B026B03A668B8D256D8504A033287F
-F8B026B03A668B8D256D8504A0332800
+Block traite =    2DA14A56B1964410A034602CC9E7A2F4
+2DA14A56B1964410A034602CC9E7A200
+valeur reel du bloque
 ['2D', '2D', '2D', '2D', '2D', '2D', '2D', '0A', '54', '68', '65', '20', '50', '34', '43', '20']
 ---------
 ---------
 index du block (depuis la fin) = 5
-Block traite =    255DE900AFF59B79A7DC19105967C49E
-255DE900AFF59B79A7DC19105967C400
+Block traite =    0983CDC43CB60A513B7EEE0B101D2522
+0983CDC43CB60A513B7EEE0B101D2500
+valeur reel du bloque
 ['20', '6C', '65', '20', '70', '61', '64', '64', '69', '6E', '67', '2E', '0A', '2D', '2D', '2D']
 ---------
-
 ---------
 index du block (depuis la fin) = 4
-Block traite =    5D0C5BF87F0CB23208134D6E700D1CBF
-5D0C5BF87F0CB23208134D6E700D1C00
+Block traite =    3CEE32851352E0E8E05AB2167198CB53
+3CEE32851352E0E8E05AB2167198CB00
+valeur reel du bloque
 ['6F', '64', '65', '20', '65', '74', '0A', '64', '27', '65', '6E', '6C', '65', '76', '65', '72']
 ---------
 ---------
 index du block (depuis la fin) = 3
-Block traite =    1C57C811186C4D36593B574036B15FC0
-1C57C811186C4D36593B574036B15F00
+Block traite =    C3B0FF22B95D72A378745489F9694A6F
+C3B0FF22B95D72A378745489F9694A00
+valeur reel du bloque
 ['65', '72', '22', '20', '63', '65', '63', '69', '20', '65', '6E', '20', '75', '6E', '69', '63']
 ---------
 ---------
 index du block (depuis la fin) = 2
-Block traite =    3C77A2775286FDD95B9AB8DAD0DF62FB
-3C77A2775286FDD95B9AB8DAD0DF6200
+Block traite =    D3F9F50313E99CE14A8F7FF4E5E43B99
+D3F9F50313E99CE14A8F7FF4E5E43B00
+valeur reel du bloque
 ['65', '20', '70', '61', '73', '20', '64', '65', '20', '22', '64', 'C3', 'A9', '63', '6F', '64']
 ---------
 ---------
 index du block (depuis la fin) = 1
-Block traite =    D2CC81FCD64064034A29F413C8D68950
-D2CC81FCD64064034A29F413C8D68900
+Block traite =    AACE2E8044C3A28DB44C92DCED9EFE0C
+AACE2E8044C3A28DB44C92DCED9EFE00
+valeur reel du bloque
 ['C3', 'A9', '75', '73', '73', '69', '20', '21', '20', '4E', '27', '6F', '75', '62', '6C', '69']
 ---------
 --------- IV -----------
 index du block (depuis la fin) = 0
-Block traite =    e7d909b86fd73d5031a87d1a10df5bd0
-e7d909b86fd73d5031a87d1a10df5b00
+Block traite =    4d8a5773ef07a6f067ff995ccd8c18a3
+4d8a5773ef07a6f067ff995ccd8c1800
+valeur reel du bloque
 ['53', '61', '6C', '75', '74', '20', '65', '63', '68', '61', '6C', '6C', '69', '65', '72', '2C']
----------
