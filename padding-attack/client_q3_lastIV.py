@@ -4,7 +4,7 @@ import urllib.parse
 import urllib.error
 import base64
 import helpers
-import sys
+
 
 # excelente explication
 #http://blog.gdssecurity.com/labs/2010/9/14/automated-padding-oracle-attacks-with-padbuster.html
@@ -12,7 +12,7 @@ import sys
 # ['36', '63', '63', '66', '31', '64', '61', '65', '36', '35', '32', '38', '31', '32', '34', '01']
 
 
-DEBUG = 0
+DEBUG = 1
 index_du_cypher = 0x01
 format_index = 1
 IntValue = []
@@ -134,7 +134,6 @@ def find_value_plaintext(index):
             if(DEBUG):
                 print("IntValue")
                 print(IntValue[-int(index_du_cypher)])
-            print(IntValue)
             return index * 256
             break
 
@@ -163,7 +162,6 @@ def init_block_cracked_oracle():
 URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
 oracle="/padding-attack/oracle/echallier"
-# seedNum = 135
 seedNum = 135
 
 #print(getSeed(51))
@@ -173,108 +171,52 @@ seed=server.query("/padding-attack/challenge/echallier/" + str(seedNum))
 
 cypher=seed['ciphertext']
 IV=seed['IV']
-print("!!!!!!!!!!!!")
-print(int(sys.argv[1]))
-begining_index_block = int(sys.argv[1])
-index_block = int(sys.argv[2])
-print("message crypte")
-print(cypher)
-print("------------------------")
-print("INDEXES")
-print("from")
-print(begining_index_block)
-print("to")
-print(index_block)
-
-
+index_block = 12
 #le IV que l'on va manipuler
+# print(cypher)
+# # debut boucle
+# C = IV
+# C_original = IV
+# index_du_cypher = 0x01
+# format_index = 1
+# IntValue = []
+# #le valeur intermediaire que l'on cherche a trouver
+# CLimiterOriginal = 32
+# CLimiter = CLimiterOriginal
 
-# debut boucle
-if(index_block != 0):
-    for i in range(begining_index_block, index_block + 1):
-        C = getBloc(cypher, index_block)
-        C_original = getBloc(cypher, index_block)
-        index_du_cypher = 0x01
-        format_index = 1
-        IntValue = []
-        #le valeur intermediaire que l'on cherche a trouver
-        CLimiterOriginal = 32
-        CLimiter = CLimiterOriginal
-        
-        print("---------")
-        print("index du block (depuis la fin) = " + str(index_block))
-        print("Block traite =    " + C_original)
-        #le ciphertext que l'on va envoyer
-        cipherTextHack = getBloc(cypher, index_block + 1)
-        #utilise pour gerer la place du mask
-        #index qui permet de parcourir le bloc et ded changer les valeures lorsque l'on veut avoir un xor avec 1, 2, 3 etc...
-        
-        # FIN DEFINITION DES VARIABLES
-        
-        
-        # on calcul le premier chara
-        
-        C = C[0:CLimiter-2] + "00" + C[CLimiter:]
-        print(C)
-        format_index = find_value_plaintext(format_index)
-        
-        # on calcul le reste
-        for i in range(15):
-            C=init_block_cracked_oracle()
-            format_index = find_value_plaintext(format_index)
-        print("valeur reel du bloque")
-        print(IntValue)
-        index_block = index_block - 1
-        print("---------")
+# print("---------")
+# print("index du block (depuis la fin) = " + str(index_block))
+# print("Block traite =    " + C_original)
+# #le ciphertext que l'on va envoyer
+# cipherTextHack = getBloc(cypher, 12)
+# #utilise pour gerer la place du mask
+# #index qui permet de parcourir le bloc et ded changer les valeures lorsque l'on veut avoir un xor avec 1, 2, 3 etc...
+
+# # FIN DEFINITION DES VARIABLES
 
 
-#dernier avec IV
-else:
-    C = IV
-    C_original = IV
-    index_du_cypher = 0x01
-    format_index = 1
-    IntValue = []
-    #le valeur intermediaire que l'on cherche a trouver
-    CLimiterOriginal = 32
-    CLimiter = CLimiterOriginal
-    
-    print("--------- IV -----------")
-    print("index du block (depuis la fin) = " + str(index_block))
-    print("Block traite =    " + C_original)
-    #le ciphertext que l'on va envoyer
-    cipherTextHack = getBloc(cypher, index_block)
-    #utilise pour gerer la place du mask
-    #index qui permet de parcourir le bloc et ded changer les valeures lorsque l'on veut avoir un xor avec 1, 2, 3 etc...
-    
-    # FIN DEFINITION DES VARIABLES
-    
-    
-    # on calcul le premier chara
-    
-    C = C[0:CLimiter-2] + "00" + C[CLimiter:]
-    print(C)
-    format_index = find_value_plaintext(format_index)
-    
-    # on calcul le reste
-    for i in range(15):
-        C=init_block_cracked_oracle()
-        format_index = find_value_plaintext(format_index)
+# # on calcul le premier chara
 
-    print("valeur reel du bloque")
-    print(IntValue)
-    index_block = index_block - 1
-    print("---------")
+# C = C[0:CLimiter-2] + "00" + C[CLimiter:]
+# print("IV = ")
+# print(IV)
+# print(C)
+# format_index = find_value_plaintext(format_index)
+
+# # on calcul le reste
+# for i in range(15):
+#     C=init_block_cracked_oracle()
+#     format_index = find_value_plaintext(format_index)
+#     print("valeur reel du bloque")
+#     print(IntValue)
+#     index_block = index_block - 1
+#     print("---------")
 
 
+plain_final ="53616C757420656368616C6C696572272CC3A9757373692021204E276F75626C696520706173206465202264C3A9636F64657222206365636920656E20756E69636F64652065740A6427656E6C65766572206C652070616464696E672E0A2D2D2D2D2D2D2D2D2D2D0A54686520503443207333727633720A0A736565643A203133350A70736575646F2D72616E646F6D206A756E6B3A20666F6F0A6D61633A203230643266653664393866343466613163366366653338616439323530343332"
 
-# fin boucle
-# 2 recuperer l'array et la copier dans resArr
 
-# resArr = ['36', '63', '66', '65', '33', '38', '61', '64', '39', '32', '35', '30', '34', '33', '32', '01']
-# resStr = ""
-# for i in range(len(resArr)):
-#     resStr += resArr[i]
+plaintext = base64.b16decode(plain_final).decode()
 
-# # enjoy !
-# print(server.query("/padding-attack/last-block/echallier/"+str(seedNum), {'value': resStr}))
+print(plaintext)
+#print(server.query("/padding-attack/validation/echallier/"+str(seedNum), {'plaintext': plaintext}))
