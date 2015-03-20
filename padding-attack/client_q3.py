@@ -164,7 +164,7 @@ URL="http://pac.bouillaguet.info/TP2"
 server = Server(URL)
 oracle="/padding-attack/oracle/echallier"
 # seedNum = 135
-seedNum = 135
+seedNum = 136
 
 #print(getSeed(51))
 

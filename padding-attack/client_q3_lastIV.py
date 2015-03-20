@@ -164,59 +164,31 @@ server = Server(URL)
 oracle="/padding-attack/oracle/echallier"
 seedNum = 135
 
-#print(getSeed(51))
+#53616C757420656368616C6C69657227
+#C3
+#A9757373692021204E276F75626C696520706173206465202264C3A9636F64657222206365636920656E20756E69636F64652065740A6427656E6C65766572206C652070616464696E672E0A2D2D2D2D2D2D2D2D2D2D0A54686520503443207333727633720A0A736565643A203133350A70736575646F2D72616E646F6D206A756E6B3A20666F6F0A6D61633A203230643266653664393866343466613163366366653338616439323530343332
 
-seed=server.query("/padding-attack/challenge/echallier/" + str(seedNum))
-
-
-cypher=seed['ciphertext']
-IV=seed['IV']
-index_block = 12
-#le IV que l'on va manipuler
-# print(cypher)
-# # debut boucle
-# C = IV
-# C_original = IV
-# index_du_cypher = 0x01
-# format_index = 1
-# IntValue = []
-# #le valeur intermediaire que l'on cherche a trouver
-# CLimiterOriginal = 32
-# CLimiter = CLimiterOriginal
-
-# print("---------")
-# print("index du block (depuis la fin) = " + str(index_block))
-# print("Block traite =    " + C_original)
-# #le ciphertext que l'on va envoyer
-# cipherTextHack = getBloc(cypher, 12)
-# #utilise pour gerer la place du mask
-# #index qui permet de parcourir le bloc et ded changer les valeures lorsque l'on veut avoir un xor avec 1, 2, 3 etc...
-
-# # FIN DEFINITION DES VARIABLES
+plain_final ="53616C757420656368616C6C69657227C3A9757373692021204E276F75626C696520706173206465202264C3A9636F64657222206365636920656E20756E69636F64652065740A6427656E6C65766572206C652070616464696E672E0A2D2D2D2D2D2D2D2D2D2D0A54686520503443207333727633720A0A736565643A203133350A70736575646F2D72616E646F6D206A756E6B3A20666F6F0A6D61633A203230643266653664393866343466613163366366653338616439323530343332"
 
 
-# # on calcul le premier chara
+C = plain_final[0:32] + "00" + plain_final[34:]
+format = 0
 
-# C = C[0:CLimiter-2] + "00" + C[CLimiter:]
-# print("IV = ")
-# print(IV)
-# print(C)
-# format_index = find_value_plaintext(format_index)
-
-# # on calcul le reste
-# for i in range(15):
-#     C=init_block_cracked_oracle()
-#     format_index = find_value_plaintext(format_index)
-#     print("valeur reel du bloque")
-#     print(IntValue)
-#     index_block = index_block - 1
-#     print("---------")
-
-
-plain_final ="53616C757420656368616C6C696572272CC3A9757373692021204E276F75626C696520706173206465202264C3A9636F64657222206365636920656E20756E69636F64652065740A6427656E6C65766572206C652070616464696E672E0A2D2D2D2D2D2D2D2D2D2D0A54686520503443207333727633720A0A736565643A203133350A70736575646F2D72616E646F6D206A756E6B3A20666F6F0A6D61633A203230643266653664393866343466613163366366653338616439323530343332"
+for i in range(256):
+    val_tmp = "{0:02x}".format(format)
+    format = (i + 1)
+    C = plain_final[0:32] + str(val_tmp) + plain_final[34:38]
+    print(C)
+    try:
+        plaintext = base64.b16decode(C).decode()
+        
+        print(server.query("/padding-attack/validation/echallier/"+str(seedNum), {'plaintext': plaintext}))
+        print(C)
+    except:
+        print("bad char")
 
 
-plaintext = base64.b16decode(plain_final).decode()
-
-print(plaintext)
-#print(server.query("/padding-attack/validation/echallier/"+str(seedNum), {'plaintext': plaintext}))
+#plaintext = base64.b16decode(IV_tmp).decode()
+ 
+#print(plaintext)
+# print(server.query("/padding-attack/validation/echallier/"+str(seedNum), {'plaintext': plain_final}))
