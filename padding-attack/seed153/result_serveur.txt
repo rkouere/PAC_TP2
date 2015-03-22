@@ -1,0 +1,71 @@
+---------
+index du block (depuis la fin) = 11
+Block traite =    EFFDC4C9EBC5FA1C3BCB605F7E15816D
+EFFDC4C9EBC5FA1C3BCB605F7E158100
+['64', '63', '35', '61', '36', '36', '32', '62', '30', '65', '37', '36', '63', '34', '32', '01']
+---------
+index du block (depuis la fin) = 10
+Block traite =    1C046A3F9A56D7A04BEEA0FD0AB08823
+1C046A3F9A56D7A04BEEA0FD0AB08800
+['66', '32', '34', '65', '30', '34', '33', '38', '61', '33', '36', '38', '37', '38', '33', '37']
+---------
+---------
+index du block (depuis la fin) = 9
+Block traite =    CD75939BEA0FF3A1242A62513932D52E
+CD75939BEA0FF3A1242A62513932D500
+['6A', '75', '6E', '6B', '3A', '20', '66', '6F', '6F', '0A', '6D', '61', '63', '3A', '20', '65']
+---------
+---------
+index du block (depuis la fin) = 8
+Block traite =    DDF7D9DD72D13F84B202D552EC9F02CB
+DDF7D9DD72D13F84B202D552EC9F0200
+['33', '0A', '70', '73', '65', '75', '64', '6F', '2D', '72', '61', '6E', '64', '6F', '6D', '20']
+---------
+---------
+index du block (depuis la fin) = 7
+Block traite =    00F1C3579DF660DD3C0A028B6CC7E898
+00F1C3579DF660DD3C0A028B6CC7E800
+['73', '33', '72', '76', '33', '72', '0A', '0A', '73', '65', '65', '64', '3A', '20', '31', '35']
+---------
+---------
+index du block (depuis la fin) = 6
+Block traite =    83DC1C784131F5881A1B5B88082729D1
+83DC1C784131F5881A1B5B8808272900
+['2D', '2D', '2D', '2D', '2D', '2D', '2D', '0A', '54', '68', '65', '20', '50', '34', '43', '20']
+---------
+---------
+index du block (depuis la fin) = 5
+Block traite =    40D91F1EE7D59EB902753325BD435205
+40D91F1EE7D59EB902753325BD435200
+['20', '6C', '65', '20', '70', '61', '64', '64', '69', '6E', '67', '2E', '0A', '2D', '2D', '2D']
+---------
+---------
+index du block (depuis la fin) = 4
+Block traite =    6185BD12C6394FEF91F1CC6A44890EFA
+6185BD12C6394FEF91F1CC6A44890E00
+valeur reel du bloque
+['6F', '64', '65', '20', '65', '74', '0A', '64', '27', '65', '6E', '6C', '65', '76', '65', '72']
+---------
+---------
+index du block (depuis la fin) = 3
+Block traite =    27D9C046C7E8AF605C80EB206271062A
+27D9C046C7E8AF605C80EB2062710600
+['65', '72', '22', '20', '63', '65', '63', '69', '20', '65', '6E', '20', '75', '6E', '69', '63']
+---------
+---------
+index du block (depuis la fin) = 2
+Block traite =    247177DC6611CCCFACBF9DB9DAD225ED
+247177DC6611CCCFACBF9DB9DAD22500
+['65', '20', '70', '61', '73', '20', '64', '65', '20', '22', '64', 'C3', 'A9', '63', '6F', '64']
+---------
+---------
+index du block (depuis la fin) = 1
+Block traite =    D006331A34CA0B30B6128A78988D9CD5
+D006331A34CA0B30B6128A78988D9C00
+['C3', 'A9', '75', '73', '73', '69', '20', '21', '20', '4E', '27', '6F', '75', '62', '6C', '69']
+---------
+--------- IV -----------
+index du block (depuis la fin) = 0
+Block traite =    170b131285e0a49ce9dbc019212c4551
+['53', '61', '6C', '75', '74', '20', '65', '63', '68', '61', '6C', '6C', '69', '65', '72', '2C']
+---------
